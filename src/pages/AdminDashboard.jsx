@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import api from "../api/axios";
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 
 function AdminDashboard() {
+  const navigate = useNavigate();
   const [stats, setStats] = useState(null);
 
   const fetchDashboard = async () => {
