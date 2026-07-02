@@ -40,14 +40,14 @@ function AdminDashboard() {
       </h1>
 
       <button
-        onClick={() => (window.location.href = "/admin/upload")}
+        onClick={() => navigate("/admin/upload")}
         className="mb-6 bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition"
       >
         Upload New Paper
       </button>
 
       <button
-        onClick={() => (window.location.href = "/admin/users")}
+        onClick={() => navigate("/admin/users")}
         className="mb-4 mr-4 bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition mx-4"
       >
         Manage Users
