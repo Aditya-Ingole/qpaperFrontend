@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import api from "../api/axios";
 
 function UserDashboard() {
+  const navigate = useNavigate();
+
   const [papers, setPapers] = useState([]);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
@@ -49,20 +52,25 @@ function UserDashboard() {
   };
 
   return (
-    <div className="p-8">
-      <h1 className="text-3xl font-bold mb-6 text-indigo-600">
-        Question Papers
-      </h1>
+    <div>
 
-      {/* ✅ FILTER SECTION */}
-      {/* ✅ MINIMAL FILTER TOOLBAR */}
-      <div className="flex items-center gap-3 mb-6">
-        <span className="text-gray-500 text-sm font-medium">Filter:</span>
+      {/* ✅ HEADER */}
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold text-gray-800">
+          Welcome Back 👋
+        </h1>
+        <p className="text-gray-500 mt-1">
+          Browse papers from your subscribed categories.
+        </p>
+      </div>
+
+      {/* ✅ FILTER BAR */}
+      <div className="flex flex-wrap items-center gap-3 mb-6 bg-white p-4 rounded-xl shadow-sm">
 
         <input
           type="text"
           placeholder="Subject"
-          className="px-3 py-1.5 text-sm border rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500"
+          className="px-3 py-2 text-sm border rounded-md focus:ring-1 focus:ring-indigo-500"
           value={subject}
           onChange={(e) => setSubject(e.target.value)}
         />
@@ -70,17 +78,14 @@ function UserDashboard() {
         <input
           type="number"
           placeholder="Year"
-          className="px-3 py-1.5 text-sm border rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500"
+          className="px-3 py-2 text-sm border rounded-md focus:ring-1 focus:ring-indigo-500"
           value={year}
           onChange={(e) => setYear(e.target.value)}
         />
 
         <button
-          onClick={() => {
-            setPage(1);
-            fetchPapers();
-          }}
-          className="px-4 py-1.5 text-sm bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition"
+          onClick={() => setPage(1)}
+          className="px-4 py-2 text-sm bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition"
         >
           Apply
         </button>
@@ -91,23 +96,40 @@ function UserDashboard() {
               setSubject("");
               setYear("");
               setPage(1);
-
-              // ✅ Important: fetch without filters
-              setTimeout(() => {
-                fetchPapers();
-              }, 0);
             }}
             className="text-sm text-gray-500 hover:text-gray-700"
           >
             Reset
           </button>
         )}
+
+        <button
+          onClick={() => navigate("/subscriptions")}
+          className="ml-auto bg-gray-100 px-4 py-2 text-sm rounded-md hover:bg-gray-200 transition"
+        >
+          Manage Subscriptions
+        </button>
       </div>
 
-      {/* ✅ PAPERS SECTION */}
+      {/* ✅ CONTENT */}
       {loading ? (
-        <div className="flex justify-center mt-10">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
+        <div className="flex justify-center mt-12">
+          <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-indigo-600"></div>
+        </div>
+      ) : papers.length === 0 ? (
+        <div className="bg-white p-10 rounded-xl shadow text-center">
+          <h2 className="text-xl font-semibold text-gray-700">
+            No Papers Found
+          </h2>
+          <p className="text-gray-500 mt-2">
+            Subscribe to categories or adjust filters.
+          </p>
+          <button
+            onClick={() => navigate("/subscriptions")}
+            className="mt-4 bg-indigo-600 text-white px-4 py-2 rounded-lg"
+          >
+            Manage Subscriptions
+          </button>
         </div>
       ) : (
         <>
@@ -115,11 +137,15 @@ function UserDashboard() {
             {papers.map((paper) => (
               <div
                 key={paper.id}
-                className="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition"
+                className="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition"
               >
                 <h2 className="text-xl font-semibold">{paper.title}</h2>
-                <p className="text-gray-600 mt-2">Subject: {paper.subject}</p>
-                <p className="text-gray-500">Year: {paper.year}</p>
+                <p className="text-gray-600 mt-2">
+                  Subject: {paper.subject}
+                </p>
+                <p className="text-gray-500">
+                  Year: {paper.year}
+                </p>
 
                 <button
                   onClick={() => handleDownload(paper.id)}
@@ -136,16 +162,16 @@ function UserDashboard() {
             <button
               onClick={() => setPage(page - 1)}
               disabled={page === 1}
-              className="px-4 py-2 bg-gray-300 rounded disabled:opacity-50"
+              className="px-4 py-2 bg-gray-200 rounded disabled:opacity-50"
             >
               Prev
             </button>
 
-            <span className="px-4 py-2">{page}</span>
+            <span className="px-4 py-2 font-medium">{page}</span>
 
             <button
               onClick={() => setPage(page + 1)}
-              className="px-4 py-2 bg-gray-300 rounded"
+              className="px-4 py-2 bg-gray-200 rounded"
             >
               Next
             </button>

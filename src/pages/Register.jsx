@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
+import { motion } from "framer-motion";
 import api from "../api/axios";
 import toast from "react-hot-toast";
 
@@ -24,7 +25,7 @@ function Register() {
       });
 
       toast.success("Registration successful ✅");
-      navigate("/");
+      navigate("/login");
     } catch (error) {
       toast.error("Registration failed ❌");
     } finally {
@@ -33,19 +34,25 @@ function Register() {
   };
 
   return (
-    <div className="flex items-center justify-center h-[80vh]">
-      <form
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-50 via-white to-purple-50">
+      <motion.form
+        initial={{ opacity: 0, y: 40 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
         onSubmit={handleRegister}
-        className="bg-white p-8 rounded-xl shadow-lg w-96 space-y-4"
+        className="bg-white p-10 rounded-2xl shadow-md w-full max-w-md space-y-6"
       >
-        <h2 className="text-2xl font-bold text-center text-indigo-600">
-          Create Account
-        </h2>
+        <div className="text-center">
+          <h2 className="text-3xl font-bold text-gray-800">Create Account</h2>
+          <p className="text-gray-500 mt-2">
+            Start accessing question papers today
+          </p>
+        </div>
 
         <input
           type="text"
           placeholder="Full Name"
-          className="w-full p-3 border rounded-lg"
+          className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-indigo-500"
           value={name}
           onChange={(e) => setName(e.target.value)}
           required
@@ -54,7 +61,7 @@ function Register() {
         <input
           type="email"
           placeholder="Email"
-          className="w-full p-3 border rounded-lg"
+          className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-indigo-500"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
@@ -63,7 +70,7 @@ function Register() {
         <input
           type="password"
           placeholder="Password"
-          className="w-full p-3 border rounded-lg"
+          className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-indigo-500"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
@@ -76,7 +83,14 @@ function Register() {
         >
           {loading ? "Creating..." : "Register"}
         </button>
-      </form>
+
+        <p className="text-center text-sm text-gray-500">
+          Already have an account?{" "}
+          <Link to="/login" className="text-indigo-600 hover:underline">
+            Login
+          </Link>
+        </p>
+      </motion.form>
     </div>
   );
 }

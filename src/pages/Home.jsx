@@ -3,16 +3,13 @@ import { Link } from "react-router-dom";
 
 function Home() {
   return (
-    <div className="min-h-screen bg-linear-to-br from-indigo-50 via-white to-purple-50">
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50">
 
-      {/* NAV SPACE */}
-      <div className="pt-20"></div>
-
-      {/* HERO SECTION */}
-      <section className="max-w-6xl mx-auto px-6 text-center">
+      {/* ✅ HERO SECTION */}
+      <section className="max-w-6xl mx-auto px-6 pt-32 pb-24 text-center">
 
         <motion.h1
-          initial={{ opacity: 0, y: -30 }}
+          initial={{ opacity: 0, y: -40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           className="text-5xl md:text-6xl font-extrabold leading-tight text-gray-900"
@@ -29,19 +26,19 @@ function Home() {
           transition={{ delay: 0.3 }}
           className="mt-6 text-lg text-gray-600 max-w-2xl mx-auto"
         >
-          A modern platform built for students and administrators.
-          Secure, fast and beautifully designed for seamless academic access.
+          A modern SaaS platform designed for students and administrators.
+          Secure authentication, smart filtering and seamless academic access.
         </motion.p>
 
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.6 }}
-          className="mt-10 flex justify-center space-x-4"
+          className="mt-10 flex justify-center gap-4"
         >
           <Link
             to="/register"
-            className="px-8 py-3 bg-indigo-600 text-white rounded-lg shadow-md hover:shadow-lg hover:bg-indigo-700 transition"
+            className="px-8 py-3 bg-indigo-600 text-white rounded-lg shadow hover:bg-indigo-700 transition"
           >
             Get Started
           </Link>
@@ -56,74 +53,75 @@ function Home() {
 
       </section>
 
-      {/* FEATURES SECTION */}
-      <section className="max-w-6xl mx-auto px-6 py-24">
+      {/* ✅ FEATURES SECTION */}
+      <section className="max-w-6xl mx-auto px-6 pb-24">
 
         <div className="grid md:grid-cols-3 gap-10">
 
-          <motion.div
-            whileHover={{ y: -5 }}
-            className="bg-white p-8 rounded-2xl shadow-sm hover:shadow-md transition"
-          >
-            <div className="w-12 h-12 bg-indigo-100 rounded-xl flex items-center justify-center mb-6">
-              <span className="text-indigo-600 text-xl font-bold">🔒</span>
-            </div>
+          <FeatureCard
+            icon="🔐"
+            title="Secure Authentication"
+            text="JWT-based authentication ensures safe, role-based access control."
+          />
 
-            <h3 className="text-xl font-semibold mb-3">
-              Secure Authentication
-            </h3>
+          <FeatureCard
+            icon="📂"
+            title="Category Subscriptions"
+            text="Subscribe to multiple categories and see only relevant papers."
+          />
 
-            <p className="text-gray-600">
-              JWT-based authentication ensures role-based secure access for both students and administrators.
-            </p>
-          </motion.div>
-
-
-          <motion.div
-            whileHover={{ y: -5 }}
-            className="bg-white p-8 rounded-2xl shadow-sm hover:shadow-md transition"
-          >
-            <div className="w-12 h-12 bg-indigo-100 rounded-xl flex items-center justify-center mb-6">
-              <span className="text-indigo-600 text-xl font-bold">📂</span>
-            </div>
-
-            <h3 className="text-xl font-semibold mb-3">
-              Easy Paper Management
-            </h3>
-
-            <p className="text-gray-600">
-              Admins can upload, organize and manage question papers with a modern dashboard interface.
-            </p>
-          </motion.div>
-
-
-          <motion.div
-            whileHover={{ y: -5 }}
-            className="bg-white p-8 rounded-2xl shadow-sm hover:shadow-md transition"
-          >
-            <div className="w-12 h-12 bg-indigo-100 rounded-xl flex items-center justify-center mb-6">
-              <span className="text-indigo-600 text-xl font-bold">⚡</span>
-            </div>
-
-            <h3 className="text-xl font-semibold mb-3">
-              Fast & Responsive
-            </h3>
-
-            <p className="text-gray-600">
-              Built with modern technologies for smooth performance and fully responsive experience.
-            </p>
-          </motion.div>
+          <FeatureCard
+            icon="⚡"
+            title="Fast & Responsive"
+            text="Optimized frontend and backend for smooth performance."
+          />
 
         </div>
 
       </section>
 
-      {/* FOOTER */}
+      {/* ✅ CTA SECTION */}
+      <section className="bg-white py-20 text-center border-t">
+        <h2 className="text-3xl font-bold text-gray-800">
+          Ready to simplify your exam preparation?
+        </h2>
+
+        <Link
+          to="/register"
+          className="inline-block mt-6 bg-indigo-600 text-white px-8 py-3 rounded-lg hover:bg-indigo-700 transition"
+        >
+          Create Your Account
+        </Link>
+      </section>
+
+      {/* ✅ FOOTER */}
       <footer className="text-center py-8 text-gray-500 text-sm">
         © {new Date().getFullYear()} QPaper Portal — Built with React & .NET
       </footer>
 
     </div>
+  );
+}
+
+/* ✅ Reusable Feature Card */
+function FeatureCard({ icon, title, text }) {
+  return (
+    <motion.div
+      whileHover={{ y: -5 }}
+      className="bg-white p-8 rounded-2xl shadow-sm hover:shadow-md transition"
+    >
+      <div className="w-12 h-12 bg-indigo-100 rounded-xl flex items-center justify-center mb-6 text-xl">
+        {icon}
+      </div>
+
+      <h3 className="text-xl font-semibold mb-3">
+        {title}
+      </h3>
+
+      <p className="text-gray-600">
+        {text}
+      </p>
+    </motion.div>
   );
 }
 

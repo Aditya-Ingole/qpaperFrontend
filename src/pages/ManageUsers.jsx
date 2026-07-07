@@ -11,7 +11,7 @@ function ManageUsers() {
       setLoading(true);
       const response = await api.get("/admin/users");
       setUsers(response.data.data);
-    } catch (error) {
+    } catch {
       toast.error("Failed to load users ❌");
     } finally {
       setLoading(false);
@@ -25,9 +25,9 @@ function ManageUsers() {
   const promoteUser = async (id) => {
     try {
       await api.put(`/admin/promote/${id}`);
-      toast.success("User promoted successfully ✅");
+      toast.success("User promoted ✅");
       fetchUsers();
-    } catch (error) {
+    } catch {
       toast.error("Promotion failed ❌");
     }
   };
@@ -41,59 +41,84 @@ function ManageUsers() {
 
     try {
       await api.delete(`/admin/users/${id}`);
-      toast.success("User deleted successfully ✅");
+      toast.success("User deleted ✅");
       fetchUsers();
-    } catch (error) {
+    } catch {
       toast.error("Delete failed ❌");
     }
   };
 
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-[60vh]">
+        <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-indigo-600"></div>
+      </div>
+    );
+  }
+
   return (
-    <div className="p-8">
-      <h1 className="text-3xl font-bold mb-6 text-indigo-600">Manage Users</h1>
+    <div>
+      {/* ✅ HEADER */}
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold text-gray-800">Manage Users</h1>
+        <p className="text-gray-500 mt-1">
+          Promote users or manage platform access.
+        </p>
+      </div>
 
-      {loading ? (
-        <div className="flex justify-center mt-10">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
-        </div>
-      ) : (
-        <div className="overflow-x-auto bg-white shadow-md rounded-xl">
-          <table className="w-full text-left">
-            <thead className="bg-gray-100">
+      {/* ✅ USER TABLE */}
+      <div className="bg-white rounded-xl shadow-sm overflow-hidden">
+        <table className="w-full text-left">
+          <thead className="bg-gray-50 border-b">
+            <tr>
+              <th className="px-6 py-4 text-sm font-medium text-gray-500">
+                Name
+              </th>
+              <th className="px-6 py-4 text-sm font-medium text-gray-500">
+                Email
+              </th>
+              <th className="px-6 py-4 text-sm font-medium text-gray-500">
+                Role
+              </th>
+              <th className="px-6 py-4 text-sm font-medium text-gray-500 text-center">
+                Actions
+              </th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {users.length === 0 ? (
               <tr>
-                <th className="p-4">Name</th>
-                <th className="p-4">Email</th>
-                <th className="p-4">Role</th>
-                <th className="p-4 text-center">Actions</th>
+                <td colSpan="4" className="text-center py-10 text-gray-500">
+                  No users found
+                </td>
               </tr>
-            </thead>
-
-            <tbody>
-              {users.map((user) => (
+            ) : (
+              users.map((user) => (
                 <tr
                   key={user.id}
-                  className="border-t hover:bg-gray-50 transition"
+                  className="border-b hover:bg-gray-50 transition"
                 >
-                  <td className="p-4">{user.name}</td>
-                  <td className="p-4">{user.email}</td>
+                  <td className="px-6 py-4">{user.name}</td>
+                  <td className="px-6 py-4">{user.email}</td>
 
-                  <td className="p-4">
+                  <td className="px-6 py-4">
                     <span
-                      className={`px-3 py-1 rounded-full text-sm ${
+                      className={`px-3 py-1 rounded-full text-xs font-medium ${
                         user.role === "Admin"
                           ? "bg-indigo-100 text-indigo-600"
-                          : "bg-gray-200 text-gray-700"
+                          : "bg-gray-100 text-gray-700"
                       }`}
                     >
                       {user.role}
                     </span>
                   </td>
 
-                  <td className="p-4 text-center space-x-2">
+                  <td className="px-6 py-4 text-center space-x-3">
                     {user.role !== "Admin" && (
                       <button
                         onClick={() => promoteUser(user.id)}
-                        className="bg-indigo-600 text-white px-3 py-1 rounded-lg hover:bg-indigo-700 transition"
+                        className="bg-indigo-600 text-white px-3 py-1.5 rounded-md text-sm hover:bg-indigo-700 transition"
                       >
                         Promote
                       </button>
@@ -101,25 +126,17 @@ function ManageUsers() {
 
                     <button
                       onClick={() => deleteUser(user.id)}
-                      className="bg-red-500 text-white px-3 py-1 rounded-lg hover:bg-red-600 transition"
+                      className="bg-red-500 text-white px-3 py-1.5 rounded-md text-sm hover:bg-red-600 transition"
                     >
                       Delete
                     </button>
                   </td>
                 </tr>
-              ))}
-
-              {users.length === 0 && (
-                <tr>
-                  <td colSpan="4" className="text-center p-6 text-gray-500">
-                    No users found
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
-      )}
+              ))
+            )}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }

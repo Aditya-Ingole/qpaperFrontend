@@ -7,66 +7,79 @@ function Navbar() {
   const role = localStorage.getItem("role");
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("role");
-    navigate("/");
+    localStorage.clear();
+    navigate("/login");
+  };
+
+  const handleLogoClick = () => {
+    if (role === "Admin") navigate("/admin");
+    else if (role === "User") navigate("/user");
+    else navigate("/");
   };
 
   return (
-    <nav className="bg-white shadow-md p-4 flex justify-between items-center">
+    <nav className="bg-white shadow-sm px-6 py-4 flex justify-between items-center border-b">
+      
+      {/* ✅ Logo */}
       <h1
-        onClick={() => {
-          const role = localStorage.getItem("role");
-
-          if (role === "Admin") {
-            navigate("/admin");
-          } else if (role === "User") {
-            navigate("/user");
-          } else {
-            navigate("/");
-          }
-        }}
-        className="text-xl font-bold text-indigo-600 cursor-pointer hover:opacity-80 transition"
+        onClick={handleLogoClick}
+        className="text-xl font-semibold text-indigo-600 cursor-pointer"
       >
         QPaper
       </h1>
 
-      <div className="space-x-4">
-        {!token ? (
-          <>
-            <Link to="/login" className="text-gray-700 hover:text-indigo-600">
-              Login
-            </Link>
-            <Link
-              to="/register"
-              className="text-gray-700 hover:text-indigo-600"
-            >
-              Register
-            </Link>
-          </>
-        ) : (
-          <>
-            {role === "Admin" && (
-              <Link to="/admin" className="text-gray-700 hover:text-indigo-600">
-                Admin
+      {/* ✅ Navigation Links */}
+      {token && (
+        <div className="flex items-center space-x-6 text-sm font-medium">
+          
+          {role === "Admin" && (
+            <>
+              <Link to="/admin" className="hover:text-indigo-600">
+                Dashboard
               </Link>
-            )}
-
-            {role === "User" && (
-              <Link to="/user" className="text-gray-700 hover:text-indigo-600">
-                User
+              <Link to="/admin/categories" className="hover:text-indigo-600">
+                Categories
               </Link>
-            )}
+              <Link to="/admin/upload" className="hover:text-indigo-600">
+                Upload
+              </Link>
+              <Link to="/admin/users" className="hover:text-indigo-600">
+                Users
+              </Link>
+            </>
+          )}
 
-            <button
-              onClick={handleLogout}
-              className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition"
-            >
-              Logout
-            </button>
-          </>
-        )}
-      </div>
+          {role === "User" && (
+            <>
+              <Link to="/user" className="hover:text-indigo-600">
+                Dashboard
+              </Link>
+              <Link to="/subscriptions" className="hover:text-indigo-600">
+                Subscriptions
+              </Link>
+            </>
+          )}
+
+          <button
+            onClick={handleLogout}
+            className="bg-red-500 text-white px-4 py-1.5 rounded-md hover:bg-red-600 transition"
+          >
+            Logout
+          </button>
+        </div>
+      )}
+
+      {/* ✅ Public Navigation */}
+      {!token && (
+        <div className="flex items-center space-x-4 text-sm">
+          <Link to="/login" className="hover:text-indigo-600">
+            Login
+          </Link>
+          <Link to="/register" className="hover:text-indigo-600">
+            Register
+          </Link>
+        </div>
+      )}
     </nav>
   );
 }

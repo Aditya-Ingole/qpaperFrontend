@@ -1,24 +1,29 @@
 import { Routes, Route } from "react-router-dom";
+import Layout from "./components/Layout";
+import ProtectedRoute from "./components/ProtectedRoute";
+
+import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+
 import UserDashboard from "./pages/UserDashboard";
+import Subscriptions from "./pages/Subscriptions";
+
 import AdminDashboard from "./pages/AdminDashboard";
-import ProtectedRoute from "./components/ProtectedRoute";
-import Navbar from "./components/Navbar";
+import ManageCategories from "./pages/ManageCategories";
 import UploadPaper from "./pages/UploadPaper";
 import ManageUsers from "./pages/ManageUsers";
-import Home from "./pages/Home";
 
 function App() {
   return (
-    <div className="min-h-screen bg-gray-100">
-      <Navbar />
-
+    <Layout>
       <Routes>
+        {/* ✅ Public Routes */}
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
 
+        {/* ✅ User Routes */}
         <Route
           path="/user"
           element={
@@ -29,10 +34,29 @@ function App() {
         />
 
         <Route
+          path="/subscriptions"
+          element={
+            <ProtectedRoute role="User">
+              <Subscriptions />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* ✅ Admin Routes */}
+        <Route
           path="/admin"
           element={
             <ProtectedRoute role="Admin">
               <AdminDashboard />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/admin/categories"
+          element={
+            <ProtectedRoute role="Admin">
+              <ManageCategories />
             </ProtectedRoute>
           }
         />
@@ -54,8 +78,26 @@ function App() {
             </ProtectedRoute>
           }
         />
+
+        <Route
+          path="/subscriptions"
+          element={
+            <ProtectedRoute role="User">
+              <Subscriptions />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/admin/categories"
+          element={
+            <ProtectedRoute role="Admin">
+              <ManageCategories />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
-    </div>
+    </Layout>
   );
 }
 
